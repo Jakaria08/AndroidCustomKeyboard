@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.blackcj.customkeyboard">
+    package="com.blackcj.customkeyboard"
+    android:sharedUserId="I.O.T"
+    android:sharedUserLabel="@string/I.O.T">
 
     <application
         android:label="@string/ime_name">
