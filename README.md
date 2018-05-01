@@ -12,3 +12,6 @@
 3. When start typing change the keybord to AndroidCustomKeyboard by clicking keyboard icon
 4. Your text typing will be recorded!
 
+## Keyboard
+https://github.com/Jakaria08/AndroidCustomKeyboard/blob/master/5.png
+
