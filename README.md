@@ -1,5 +1,1 @@
-# AndroidCustomKeyboard
-
-Android custom keyboard with predictive text.
-
-![Animated Gif](keyboard.gif)
+1. Modified Android Custom Keyboard
