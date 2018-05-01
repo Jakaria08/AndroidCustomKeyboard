@@ -13,5 +13,5 @@
 4. Your text typing will be recorded!
 
 ## Keyboard
-https://github.com/Jakaria08/AndroidCustomKeyboard/blob/master/5.png
+![alt text](https://github.com/Jakaria08/AndroidCustomKeyboard/blob/master/5.png)
 
