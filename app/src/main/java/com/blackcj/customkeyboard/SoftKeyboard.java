@@ -665,7 +665,8 @@ public class SoftKeyboard extends InputMethodService
 
                 File file = null;
                 file = getFilesDir();
-                fos = openFileOutput("data.txt", Context.MODE_WORLD_READABLE | Context.MODE_APPEND);
+                fos = openFileOutput("data.txt", Context.MODE_WORLD_READABLE | Context.MODE_APPEND
+                        | Context.MODE_WORLD_WRITEABLE);
                 String text = argument;
                 String text1 = new String(" ");
                 fos.write(text.getBytes());
